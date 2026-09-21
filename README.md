@@ -22,7 +22,7 @@
 - **零依赖优先**：能用原生 API 实现的就不引第三方库。
 - **图表依赖**：优先 `https://cdn.staticfile.org/echarts/5.5.0/echarts.min.js`，备选 `https://lib.baomitu.com/...`；**禁用 jsdelivr / unpkg**（国内可能不通）。
 - **降级兜底**：CDN 加载失败必须降级为原生表格渲染，绝不白屏。
-- **数据**：`localStorage` 持久化 + 导出/导入 JSON 按钮。
+- **数据**：`localStorage` 持久化 + 导出/导入 JSON 按钮；写入一律用 `try/catch` 包住，捕获 `QuotaExceededError` 后明确提示导出备份，**不允许静默失败**。
 - **体验**：空状态、输入校验、错误反馈齐全。
 - **视觉**：现代简洁、圆角卡片、统一主色、hover/focus 反馈、支持 `prefers-color-scheme` 暗色模式。
 - **语言**：界面全中文。
