@@ -50,7 +50,7 @@
 2. 最近一次数据用 localStorage 持久化，key 前缀 "csvdash-"（注意大小限制，超过 2MB 时跳过持久化并提示）。
 3. 处理：空文件、只有表头、全部列都无法识别等情况的友好提示。
 4. 视觉：现代简洁、虚线拖拽框 hover 高亮、拖拽悬停时整体模糊变暗、prefers-color-scheme 暗色模式。
-5. 代码行数控制在 650 行以内，CSV 解析器加中文注释说明状态机逻辑。
+5. 代码总量建议控制在 650 行左右；功能完整性优先于行数——不得为压缩行数而省略功能或用省略号代替代码，超出时只精简注释与冗余写法。CSV 解析器加中文注释说明状态机逻辑。
 ````
 
 ## Prompt (English Version)
@@ -90,7 +90,7 @@ Reply: one-line summary -> exactly ONE ```html full block (no ellipsis) -> 3 usa
 2. Persist the last dataset in localStorage with key prefix "csvdash-" (skip persistence above 2MB and notify the user).
 3. Friendly handling of empty files, header-only files, and columns that can't be typed.
 4. Modern clean visuals: dashed drop zone that highlights on hover, dimmed backdrop while dragging, prefers-color-scheme dark mode.
-5. Keep under 650 lines; comment the CSV parser state machine.
+5. Aim for about 650 lines; completeness outranks length — never drop features or use ellipsis to save lines; if it runs over, trim comments and redundancy only. Comment the CSV parser state machine.
 ````
 
 ## 生成后自检清单

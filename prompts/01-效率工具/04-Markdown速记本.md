@@ -51,7 +51,7 @@
 2. 数据用 localStorage 持久化，key 前缀 "mdnote-"，提供「导出 JSON / 导入 JSON」，并提供导出当前笔记为 .md 文件。
 3. 处理空状态、非法输入、成功/失败 toast；编辑内容要有 300ms 防抖自动保存，并显示「已保存」状态指示。
 4. 视觉：现代简洁、编辑区等宽字体、预览区排版美观（行高 1.7、代码块灰底）、prefers-color-scheme 暗色模式。
-5. 代码行数控制在 700 行以内，解析器部分加中文注释说明处理顺序。
+5. 代码总量建议控制在 700 行左右；功能完整性优先于行数——不得为压缩行数而省略功能或用省略号代替代码，超出时只精简注释与冗余写法。解析器部分加中文注释说明处理顺序。
 ````
 
 ## Prompt (English Version)
@@ -93,7 +93,7 @@ Hand-rolled parser in vanilla JS. Strictly no marked / markdown-it / highlight.j
 2. localStorage with key prefix "mdnote-"; Export/Import JSON plus export current note as .md.
 3. Empty states, validation, toasts; debounced (300ms) autosave with an "Saved" indicator.
 4. Modern clean UI: monospace editor, readable preview (line-height 1.7, gray code blocks), prefers-color-scheme dark mode.
-5. Keep under 700 lines; comment the parser with its processing order.
+5. Aim for about 700 lines; completeness outranks length — never drop features or use ellipsis to save lines; if it runs over, trim comments and redundancy only. Comment the parser with its processing order.
 ````
 
 ## 生成后自检清单

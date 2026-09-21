@@ -49,7 +49,7 @@
 3. 处理：超大 JSON（> 1MB）时的处理提示与分阶段渲染（避免页面假死）、空输入提示、非法 JSON 的详细报错。
 4. 视觉：类似编辑器的暗色/浅色双主题（默认跟随系统）、行号与代码区对齐、语法配色清晰、prefers-color-scheme 暗色模式。
 5. 页面显眼位置注明「所有处理均在你的浏览器本地完成，数据不会上传」。
-6. 代码行数控制在 700 行以内，树渲染与错误定位部分加中文注释。
+6. 代码总量建议控制在 700 行左右；功能完整性优先于行数——不得为压缩行数而省略功能或用省略号代替代码，超出时只精简注释与冗余写法。树渲染与错误定位部分加中文注释。
 ````
 
 ## Prompt (English Version)
@@ -92,7 +92,7 @@ Reply: one-line summary -> exactly ONE ```html full block (no ellipsis) -> 3 usa
 3. Handle oversized JSON (> 1MB) with a notice and staged rendering to avoid freezing, plus empty-input guidance and detailed invalid-JSON errors.
 4. Editor-like light/dark themes (follow the system by default), aligned line numbers, clear syntax colors, prefers-color-scheme dark mode.
 5. Prominently state: "Everything is processed locally in your browser; nothing is uploaded."
-6. Keep under 700 lines; comment the tree rendering and error localization.
+6. Aim for about 700 lines; completeness outranks length — never drop features or use ellipsis to save lines; if it runs over, trim comments and redundancy only. Comment the tree rendering and error localization.
 ````
 
 ## 生成后自检清单
