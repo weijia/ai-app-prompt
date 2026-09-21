@@ -1,0 +1,111 @@
+# Markdown 速记本
+
+> 左写右看实时预览 + 多笔记管理 + 本地全文搜索 · 难度：★★★ · 约 4 分钟
+
+## 适用场景
+
+写文档、记笔记、草稿。零依赖自研 Markdown 解析器，不引 marked CDN。
+
+## 占位符说明
+
+| 占位符 | 含义 | 示例 |
+| --- | --- | --- |
+| `{{笔记用途}}` | 主要写什么 | 「技术周记」 |
+| `{{导出格式}}` | 需要哪些导出 | 「Markdown 源文件、HTML、纯文本」 |
+
+## 提示词（中文版）
+
+````text
+请生成一个「Markdown 速记本」单文件网页应用。
+
+【背景】
+主要用途：{{笔记用途}}
+需要的导出方式：{{导出格式}}
+
+【功能要求】
+1. 左侧笔记列表：新建、重命名、删除（需确认）、按更新时间倒序展示摘要。
+2. 右侧编辑区与预览区左右分栏（窄屏改为「编辑/预览」标签切换）。
+3. 自研极简 Markdown 解析器（必须支持以下语法，其余按纯文本处理）：
+   - 标题 # ~ ######
+   - 粗体 **x**、斜体 *x*、行内代码 `x`
+   - 无序列表 - / *，有序列表 1.
+   - 引用 >、分割线 ---
+   - 代码块 ```（含语言标注时仅做高亮色块，不引第三方高亮库）
+   - 链接 [text](url)、图片 ![alt](url)
+   - 表格 | a | b |（简单管道表格）
+4. 解析安全要求：生成 HTML 前必须先对用户输入做 HTML 转义（& < > " '），再套 Markdown 标签；链接的 href 必须以 http:// 或 https:// 开头，否则丢弃该链接，防止 javascript: 注入。
+5. 工具栏：加粗、斜体、标题、列表、代码、链接、表格快捷插入（对选中的文字生效）。
+6. 全文搜索：输入关键词高亮命中笔记列表中的笔记标题与正文片段。
+7. 快捷键：Ctrl/Cmd+S 保存、Ctrl/Cmd+B 加粗、Tab 缩进两空格。
+8. 统计：字数、行数、预计阅读时长。
+
+【交付格式】
+只输出一个完整 index.html，HTML/CSS/JS 全部内联，不用 npm 与构建工具。
+回复结构：一句话说明 → 唯一的 ```html 完整代码块（禁止省略号）→ 3 行使用说明。
+
+【依赖策略】
+纯原生 JavaScript 实现 Markdown 解析，严禁引入 marked / markdown-it / highlight.js / MathJax 等任何 CDN。若代码因此偏长，优先删减 Markdown 高级语法支持，而不是改引第三方库。
+
+【工程要求】
+1. 界面全中文，移动端优先响应式（含 viewport meta），375px 宽可用。
+2. 数据用 localStorage 持久化，key 前缀 "mdnote-"，提供「导出 JSON / 导入 JSON」，并提供导出当前笔记为 .md 文件。
+3. 处理空状态、非法输入、成功/失败 toast；编辑内容要有 300ms 防抖自动保存，并显示「已保存」状态指示。
+4. 视觉：现代简洁、编辑区等宽字体、预览区排版美观（行高 1.7、代码块灰底）、prefers-color-scheme 暗色模式。
+5. 代码行数控制在 700 行以内，解析器部分加中文注释说明处理顺序。
+````
+
+## Prompt (English Version)
+
+````text
+Generate a single-file "Markdown Notes" web app.
+
+[CONTEXT]
+Primary use: {{USE}}
+Required exports: {{EXPORTS}}
+
+[FEATURES]
+1. Left note list: create, rename, delete (with confirm), sorted by update time desc with short previews.
+2. Split editor / live preview; on narrow screens switch to Edit/Preview tabs.
+3. Write a minimal Markdown parser yourself supporting exactly:
+   - headings # to ######
+   - bold **x**, italic *x*, inline code `x`
+   - unordered - / *, ordered 1.
+   - blockquote >, horizontal rule ---
+   - fenced code ``` (language tag only changes the block color; no third-party highlighter)
+   - links [text](url), images ![alt](url)
+   - simple pipe tables | a | b |
+   Anything else renders as plain text.
+4. Security: HTML-escape user input (& < > " ') BEFORE wrapping it in Markdown tags. A link href must start with http:// or https:// or the link is dropped — prevents javascript: injection.
+5. Toolbar acting on the current selection: bold, italic, heading, list, code, link, table.
+6. Full-text search highlighting matching note titles and body snippets.
+7. Shortcuts: Ctrl/Cmd+S save, Ctrl/Cmd+B bold, Tab inserts two spaces.
+8. Stats: words, lines, estimated reading time.
+
+[DELIVERY]
+One complete index.html, all inline. No npm, no build tools.
+Reply: one-line summary -> exactly ONE ```html full block (no ellipsis) -> 3 usage lines.
+
+[DEPENDENCIES]
+Hand-rolled parser in vanilla JS. Strictly no marked / markdown-it / highlight.js / MathJax or any CDN. If this makes the file long, cut advanced Markdown syntax rather than adding a library.
+
+[QUALITY]
+1. English UI, mobile-first responsive with viewport meta, usable at 375px.
+2. localStorage with key prefix "mdnote-"; Export/Import JSON plus export current note as .md.
+3. Empty states, validation, toasts; debounced (300ms) autosave with an "Saved" indicator.
+4. Modern clean UI: monospace editor, readable preview (line-height 1.7, gray code blocks), prefers-color-scheme dark mode.
+5. Keep under 700 lines; comment the parser with its processing order.
+````
+
+## 生成后自检清单
+
+- [ ] 六种标题、列表、引用、代码块、表格都渲染正常
+- [ ] 输入 `<script>alert(1)</script>` 不会被当成 HTML 执行
+- [ ] `[x](javascript:alert(1))` 不会生成可点击链接
+- [ ] 刷新后内容还在，且「已保存」提示正常出现
+- [ ] 手机上能切到编辑/预览标签
+
+## 常用追问
+
+1. 「加本地图片插入：转成 base64 存在 localStorage」
+2. 「支持导出成单独的 .html 阅读页」
+3. 「给笔记加标签和置顶功能」
