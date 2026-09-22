@@ -1,0 +1,57 @@
+<!-- 24点出题器 - 完整版 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>24点出题器</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6fb;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0}
+.card{background:#fff;border-radius:18px;padding:26px;box-shadow:0 12px 32px rgba(0,0,0,.08);width:350px;text-align:center}
+h1{font-size:19px;margin:0 0 14px;color:#222}
+.timer{font-size:34px;font-weight:700;letter-spacing:2px;color:#2f3542;background:#f1f4ff;border-radius:12px;padding:10px;margin-bottom:18px;font-variant-numeric:tabular-nums}
+.timer.warn{color:#ff6b6b;background:#fff1f1;animation:pulse .8s infinite alternate}
+@keyframes pulse{to{transform:scale(1.03)}}
+.nums{display:flex;gap:14px;justify-content:center;margin-bottom:20px}
+.num{width:64px;height:64px;line-height:64px;font-size:28px;font-weight:bold;color:#fff;background:linear-gradient(135deg,#5b8cff,#7c5cff);border-radius:50%;box-shadow:0 6px 14px rgba(91,140,255,.35)}
+.row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+button{border:none;border-radius:10px;padding:11px 15px;font-size:14px;cursor:pointer;background:#5b8cff;color:#fff;transition:.15s}
+button.gray{background:#e9edf7;color:#555}
+button.ghost{background:#fff;border:1px solid #d7deee;color:#5b8cff}
+button:active{transform:scale(.96)}
+#msg{margin-top:16px;font-size:14px;min-height:40px;line-height:1.5;text-align:left;background:#f7f9ff;border-radius:10px;padding:11px;white-space:pre-wrap;word-break:break-all}
+#msg.ok{background:#eafff2;color:#1a9c5b}
+#msg.no{background:#fff3f3;color:#e02b2b}
+.stats{font-size:12px;color:#999;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🎯 24点挑战 · 计时版</h1>
+<div class="timer" id="timer">00:00</div>
+<div class="nums">
+<div class="num" id="n1">?</div><div class="num" id="n2">?</div><div class="num" id="n3">?</div><div class="num" id="n4">?</div>
+</div>
+<div class="row">
+<button onclick="startTimer()">开始计时 ▶</button>
+<button class="gray" onclick="newGame()">换一题 🔄</button>
+<button class="ghost" onclick="showSolution()">看解法 💡</button>
+</div>
+<div id="msg">准备好后点「开始计时」，算出 24 点再点「验算」。</div>
+<div class="stats" id="stats">本轮：0 题 · 最快 00:00</div>
+</div>
+<script>
+function solve24(nums){const ops=['+','-','*','/'];const eq=(a,b)=>Math.abs(a-b)<1e-6;const combine=list=>{if(list.length===1)return null;for(let i=0;i<list.length;i++){for(let j=i+1;j<list.length;j++){const a=list[i],b=list[j];const rest=list.filter((_,k)=>k!==i&&k!==j);const tries=[];tries.push({v:a+b,e:"("+a+"+"+b+")"});tries.push({v:a-b,e:"("+a+"-"+b+")"});tries.push({v:b-a,e:"("+b+"-"+a+")"});tries.push({v:a*b,e:"("+a+"×"+b+")"});if(Math.abs(b)>1e-9)tries.push({v:a/b,e:"("+a+"÷"+b+")"});if(Math.abs(a)>1e-9)tries.push({v:b/a,e:"("+b+"÷"+a+")"});for(const t of tries){const next=rest.concat([t.v]);const sub=combine(next);if(sub){const tail=sub.replace(/^\(|\)/g,"");return tail?t.e+tail:t.e}}}}return null};return combine(nums.slice())}
+let currentNums=[],running=false,t0=0,timerId=null,elapsed=0,solvedCount=0,bestTime=Infinity;
+const timerEl=document.getElementById("timer"),msgEl=document.getElementById("msg");
+function fmt(ms){const s=Math.floor(ms/1000),m=String(Math.floor(s/60)).padStart(2,"0"),ss=String(s%60).padStart(2,"0");return m+":"+ss}
+function startTimer(){if(running)return;running=true;t0=Date.now()-elapsed;timerId=setInterval(()=>{elapsed=Date.now()-t0;timerEl.textContent=fmt(elapsed);timerEl.classList.toggle("warn",elapsed>60000)},100);msgEl.className="";msgEl.textContent="⏱ 计时中，算出表达式后点「验算」"}
+function stopTimer(){running=false;clearInterval(timerId)}
+function newGame(){stopTimer();elapsed=0;timerEl.textContent="00:00";timerEl.classList.remove("warn");let nums,sol;for(let t=0;t<3000;t++){nums=Array.from({length:4},()=>1+Math.floor(Math.random()*10));sol=solve24(nums);if(sol)break}if(!sol)return newGame();currentNums=nums;["n1","n2","n3","n4"].forEach((id,i)=>document.getElementById(id).textContent=nums[i]);msgEl.className="";msgEl.textContent="新题目已生成，点「开始计时」开抢！"}
+function checkAnswer(){if(!running){const sol=solve24(currentNums);msgEl.className="ok";msgEl.textContent="✅ 有解：\n"+currentNums.join(" , ")+" → "+sol+" = 24\n（本次未计时）";return}const sol=solve24(currentNums);stopTimer();solvedCount++;bestTime=Math.min(bestTime,elapsed);msgEl.className="ok";msgEl.textContent="🎉 答对了！用时 "+fmt(elapsed)+"\n算式："+sol+" = 24\n本轮 "+solvedCount+" 题 · 最快 "+fmt(bestTime);document.getElementById("stats").textContent="本轮："+solvedCount+" 题 · 最快 "+fmt(bestTime);setTimeout(newGame,2200)}
+function showSolution(){const sol=solve24(currentNums);msgEl.className="no";msgEl.textContent="💡 参考解法：\n"+currentNums.join(" , ")+" → "+sol+" = 24"+(running?"\n（计时仍在继续哦）":"")}
+document.addEventListener("keydown",e=>{if(e.code==="Space"){e.preventDefault();running?null:startTimer()}if(e.code==="Enter"){checkAnswer()}});
+newGame();
+</script>
+</body>
+</html>
