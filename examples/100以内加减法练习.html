@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>100以内加减法练习</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: "Microsoft YaHei", Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+.container { background: #fff; border-radius: 20px; padding: 36px 28px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); text-align: center; max-width: 480px; width: 100%; }
+h1 { color: #333; margin-bottom: 24px; font-size: 26px; }
+.timer { font-size: 18px; color: #666; margin-bottom: 16px; }
+.timer .time { color: #667eea; font-weight: bold; font-size: 26px; }
+.question-box { background: #f8f9fa; border-radius: 14px; padding: 32px 16px; margin-bottom: 22px; border: 3px solid #667eea; }
+.question { font-size: 34px; font-weight: bold; color: #222; }
+.answer { font-size: 26px; color: #28a745; font-weight: bold; min-height: 36px; margin-top: 12px; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease; }
+.answer.show { opacity: 1; visibility: visible; }
+.controls { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 22px; }
+button { padding: 11px 26px; font-size: 16px; border: none; border-radius: 25px; cursor: pointer; transition: all 0.25s ease; font-weight: bold; }
+.btn-primary { background: #667eea; color: #fff; }
+.btn-primary:hover { background: #5a6fd6; transform: translateY(-2px); }
+.btn-secondary { background: #6c757d; color: #fff; }
+.btn-secondary:hover { background: #5a6268; transform: translateY(-2px); }
+.btn-success { background: #28a745; color: #fff; }
+.btn-success:hover { background: #218838; transform: translateY(-2px); }
+.toggle-section { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 18px; padding-top: 18px; border-top: 2px solid #eee; }
+.switch { position: relative; width: 56px; height: 28px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; inset: 0; background: #ccc; border-radius: 28px; transition: .4s; }
+.slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background: #fff; border-radius: 50%; transition: .4s; }
+input:checked + .slider { background: #667eea; }
+input:checked + .slider:before { transform: translateX(28px); }
+.status { margin-top: 14px; padding: 10px; border-radius: 10px; font-weight: bold; font-size: 14px; }
+.status.running { background: #d4edda; color: #155724; }
+.status.paused { background: #fff3cd; color: #856404; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🧮 100以内加减法练习</h1>
+<div class="timer">剩余时间：<span class="time" id="timeLeft">10</span> 秒</div>
+<div class="question-box">
+<div class="question" id="question">-- + -- = ?</div>
+<div class="answer" id="answer"></div>
+</div>
+<div class="controls">
+<button class="btn-primary" id="pauseBtn" onclick="togglePause()">暂停</button>
+<button class="btn-success" onclick="nextQuestion()">下一题</button>
+</div>
+<div class="toggle-section">
+<span>10秒后显示答案</span>
+<label class="switch"><input type="checkbox" id="showAnswerToggle" checked><span class="slider"></span></label>
+</div>
+<div class="status running" id="status">状态：正在答题</div>
+</div>
+<script>
+let currentAnswer=null,timer=null,timeLeft=10,isPaused=false,showAnswerEnabled=true;
+document.getElementById("showAnswerToggle").addEventListener("change",function(){showAnswerEnabled=this.checked;});
+function generateQuestion(){const isAdd=Math.random()>0.5;let a,b;if(isAdd){a=Math.floor(Math.random()*99)+1;b=Math.floor(Math.random()*(100-a))+1;currentAnswer=a+b;return a+" + "+b+" = ?";}else{a=Math.floor(Math.random()*99)+2;b=Math.floor(Math.random()*(a-1))+1;currentAnswer=a-b;return a+" - "+b+" = ?";}}
+function nextQuestion(){clearInterval(timer);const answerEl=document.getElementById("answer");answerEl.classList.remove("show");answerEl.textContent="";document.getElementById("question").textContent=generateQuestion();timeLeft=10;document.getElementById("timeLeft").textContent=timeLeft;if(!isPaused)startTimer();}
+function startTimer(){clearInterval(timer);timer=setInterval(()=>{if(!isPaused){timeLeft--;document.getElementById("timeLeft").textContent=timeLeft;if(timeLeft<=0){clearInterval(timer);if(showAnswerEnabled){const a=document.getElementById("answer");a.textContent="答案："+currentAnswer;a.classList.add("show");}setTimeout(nextQuestion,1200);}}},1000);}
+function togglePause(){isPaused=!isPaused;const btn=document.getElementById("pauseBtn"),status=document.getElementById("status");if(isPaused){btn.textContent="继续";btn.className="btn-secondary";status.textContent="状态：已暂停";status.className="status paused";clearInterval(timer);}else{btn.textContent="暂停";btn.className="btn-primary";status.textContent="状态：正在答题";status.className="status running";startTimer();}}
+window.onload=nextQuestion;
+</script>
+</body>
+</html>
