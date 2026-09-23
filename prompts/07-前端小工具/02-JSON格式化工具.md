@@ -52,49 +52,6 @@
 6. 代码总量建议控制在 700 行左右；功能完整性优先于行数——不得为压缩行数而省略功能或用省略号代替代码，超出时只精简注释与冗余写法。树渲染与错误定位部分加中文注释。
 ````
 
-## Prompt (English Version)
-
-````text
-Generate a single-file "JSON Formatter" web app. Everything runs locally in the browser; nothing is uploaded.
-
-[CONFIG]
-Default indent: {{INDENT}} spaces
-Operations I use most: {{OPS}}
-
-[FEATURES]
-1. Two panes: input textarea on the left (monospace, line numbers) and results on the right; on narrow screens stack vertically with tabs.
-2. Core operations:
-   - pretty print with 2 / 4 / Tab indent options
-   - minify (strip whitespace and newlines)
-   - validation: on parse failure, use the JSON.parse error to locate the problem, highlight the offending line in red, and explain it in plain English (e.g. "around line 3, column 12: missing comma or closing brace")
-   - sort object keys recursively (lexicographic)
-   - escape / unescape
-   - convert JSON <-> URL query string (handle URL encoding correctly)
-3. Tree view: render the JSON as a collapsible tree built recursively in the DOM; objects/arrays expand and collapse, arrays show their length, nodes with more than 100 children start collapsed with a notice; color-code types (strings green, numbers blue, booleans purple, null gray).
-4. Path copy: hovering or clicking a node reveals its JSON Path (e.g. `data.items[2].name`) with one-click copy of the path or its value.
-5. Search: find a keyword across all keys and string values, highlight matches, auto-expand their parents, and offer hit counts with prev/next navigation.
-6. Stats: node count, max nesting depth, character count and UTF-8 byte size via TextEncoder.
-7. Export: download .json, copy to clipboard, paste-import from clipboard.
-
-[SECURITY]
-Never parse with eval or new Function — always JSON.parse. HTML-escape every rendered string value so embedded HTML can't execute.
-
-[DEPENDENCIES]
-Vanilla JS only. Zero libraries, zero CDN. Do not load CodeMirror, jsoneditor or any editor library.
-
-[DELIVERY]
-One complete index.html, all inline. No npm, no build tools.
-Reply: one-line summary -> exactly ONE ```html full block (no ellipsis) -> 3 usage lines.
-
-[QUALITY]
-1. English UI, mobile-first responsive with viewport meta, usable at 375px; input font at least 14px to prevent iOS auto-zoom.
-2. Persist the last content in localStorage with key prefix "jsontool-" (skip persistence above 200KB and say so).
-3. Handle oversized JSON (> 1MB) with a notice and staged rendering to avoid freezing, plus empty-input guidance and detailed invalid-JSON errors.
-4. Editor-like light/dark themes (follow the system by default), aligned line numbers, clear syntax colors, prefers-color-scheme dark mode.
-5. Prominently state: "Everything is processed locally in your browser; nothing is uploaded."
-6. Aim for about 700 lines; completeness outranks length — never drop features or use ellipsis to save lines; if it runs over, trim comments and redundancy only. Comment the tree rendering and error localization.
-````
-
 ## 生成后自检清单
 
 - [ ] 粘贴一段错误 JSON 能指出第几行出错

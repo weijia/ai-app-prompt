@@ -54,48 +54,6 @@
 5. 代码总量建议控制在 700 行左右；功能完整性优先于行数——不得为压缩行数而省略功能或用省略号代替代码，超出时只精简注释与冗余写法。解析器部分加中文注释说明处理顺序。
 ````
 
-## Prompt (English Version)
-
-````text
-Generate a single-file "Markdown Notes" web app.
-
-[CONTEXT]
-Primary use: {{USE}}
-Required exports: {{EXPORTS}}
-
-[FEATURES]
-1. Left note list: create, rename, delete (with confirm), sorted by update time desc with short previews.
-2. Split editor / live preview; on narrow screens switch to Edit/Preview tabs.
-3. Write a minimal Markdown parser yourself supporting exactly:
-   - headings # to ######
-   - bold **x**, italic *x*, inline code `x`
-   - unordered - / *, ordered 1.
-   - blockquote >, horizontal rule ---
-   - fenced code ``` (language tag only changes the block color; no third-party highlighter)
-   - links [text](url), images ![alt](url)
-   - simple pipe tables | a | b |
-   Anything else renders as plain text.
-4. Security: HTML-escape user input (& < > " ') BEFORE wrapping it in Markdown tags. A link href must start with http:// or https:// or the link is dropped — prevents javascript: injection.
-5. Toolbar acting on the current selection: bold, italic, heading, list, code, link, table.
-6. Full-text search highlighting matching note titles and body snippets.
-7. Shortcuts: Ctrl/Cmd+S save, Ctrl/Cmd+B bold, Tab inserts two spaces.
-8. Stats: words, lines, estimated reading time.
-
-[DELIVERY]
-One complete index.html, all inline. No npm, no build tools.
-Reply: one-line summary -> exactly ONE ```html full block (no ellipsis) -> 3 usage lines.
-
-[DEPENDENCIES]
-Hand-rolled parser in vanilla JS. Strictly no marked / markdown-it / highlight.js / MathJax or any CDN. If this makes the file long, cut advanced Markdown syntax rather than adding a library.
-
-[QUALITY]
-1. English UI, mobile-first responsive with viewport meta, usable at 375px.
-2. localStorage with key prefix "mdnote-"; Export/Import JSON plus export current note as .md.
-3. Empty states, validation, toasts; debounced (300ms) autosave with an "Saved" indicator.
-4. Modern clean UI: monospace editor, readable preview (line-height 1.7, gray code blocks), prefers-color-scheme dark mode.
-5. Aim for about 700 lines; completeness outranks length — never drop features or use ellipsis to save lines; if it runs over, trim comments and redundancy only. Comment the parser with its processing order.
-````
-
 ## 生成后自检清单
 
 - [ ] 六种标题、列表、引用、代码块、表格都渲染正常

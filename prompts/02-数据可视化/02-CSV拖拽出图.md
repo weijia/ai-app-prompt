@@ -53,46 +53,6 @@
 5. 代码总量建议控制在 650 行左右；功能完整性优先于行数——不得为压缩行数而省略功能或用省略号代替代码，超出时只精简注释与冗余写法。CSV 解析器加中文注释说明状态机逻辑。
 ````
 
-## Prompt (English Version)
-
-````text
-Generate a single-file "Drag & Drop CSV Chart" web app.
-
-[CONTEXT]
-My data is about: {{TOPIC}}
-Preferred charts: {{CHART_TYPES}}
-
-[FEATURES]
-1. Drop zone accepting .csv files (preventDefault on dragover/drop so the browser doesn't open the file), plus click-to-select, paste-text input and built-in sample data.
-2. Write your own CSV parser that correctly handles:
-   - quoted fields "xxx, yyy"
-   - newlines inside quoted fields
-   - delimiter auto-detection (comma / tab / semicolon — pick the one most frequent in the first line)
-   - if Chinese text looks garbled, show "Save the file as UTF-8 and retry"
-3. Infer column types (numeric / date / text) and let the user override each with a dropdown.
-4. Chart config panel: X axis picker, Y axis multi-select, aggregation (sum / avg / count / max), chart type switch.
-5. "Download PNG" button right after rendering (canvas or SVG -> PNG).
-6. Summary stats per numeric column: max, min, mean, median, null count.
-7. Data preview table for the first 50 rows; highlight anomalous values (non-numbers in a numeric column) with a yellow background.
-
-[DEPENDENCIES — STRICT]
-ECharts only, pinned: https://cdn.staticfile.org/echarts/5.5.0/echarts.min.js
-Implement an onerror fallback: on failure, render the same aggregation with pure CSS horizontal bars (div width as a percentage) and show a yellow banner. Never a blank page.
-In fallback mode, "Download PNG" becomes "Export SVG/CSV" instead of throwing.
-No jsdelivr / unpkg / cdnjs, no other libraries.
-
-[DELIVERY]
-One complete index.html, all inline. No npm, no build tools.
-Reply: one-line summary -> exactly ONE ```html full block (no ellipsis) -> 3 usage lines.
-
-[QUALITY]
-1. English UI, mobile-first responsive with viewport meta; at 375px the drop zone is at least 160px tall and the config panel collapses into a drawer.
-2. Persist the last dataset in localStorage with key prefix "csvdash-" (skip persistence above 2MB and notify the user).
-3. Friendly handling of empty files, header-only files, and columns that can't be typed.
-4. Modern clean visuals: dashed drop zone that highlights on hover, dimmed backdrop while dragging, prefers-color-scheme dark mode.
-5. Aim for about 650 lines; completeness outranks length — never drop features or use ellipsis to save lines; if it runs over, trim comments and redundancy only. Comment the CSV parser state machine.
-````
-
 ## 生成后自检清单
 
 - [ ] 拖文件时浏览器没有直接打开它，而是被页面接收
